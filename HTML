@@ -19,3 +19,18 @@ const firebaseConfig = {
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
 const analytics = getAnalytics(app);
+<div id="dashboard" style="display:none; color:white; font-family:Arial; padding:20px;">
+  <h1 style="color:#d4af37;">Elite Futures Dashboard</h1>
+
+  <p id="welcome"></p>
+
+  <div style="margin-top:20px;">
+    <h3>Course Progress</h3>
+    <div style="width:100%; background:#333; height:20px; border-radius:10px;">
+      <div id="bar" style="height:20px; width:0%; background:#d4af37; border-radius:10px;"></div>
+    </div>
+    <p id="percent"></p>
+  </div>
+
+  <button onclick="logout()" style="margin-top:20px;">Logout</button>
+</div>
