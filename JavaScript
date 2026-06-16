@@ -65,3 +65,18 @@ onAuthStateChanged(auth, (user) => {
     loadProgress(user.uid); // 👈 ADD THIS
   }
 });
+async function loadProgress(uid) {
+  const ref = doc(db, "users", uid);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) return;
+
+  const data = snap.data();
+  const progress = data.progress || {};
+
+  // update checkboxes
+  document.querySelectorAll(".lesson-check").forEach(cb => {
+    const id = cb.dataset.id;
+    cb.checked = progress[id] === true;
+  });
+}
