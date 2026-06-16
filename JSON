@@ -1,0 +1,25 @@
+{
+  "courseId": "futures-foundations",
+  "title": "Futures Trading Foundations",
+  "theme": "Educate – Execute – Elevate",
+  "modules": [
+    {
+      "moduleId": "m1",
+      "title": "Market Foundations",
+      "lessons": [
+        {
+          "lessonId": "m1l1",
+          "title": "What the Futures Market Actually Is"
+        },
+        {
+          "lessonId": "m1l2",
+          "title": "How Price Moves"
+        },
+        {
+          "lessonId": "m1l3",
+          "title": "Market Sessions & Volatility"
+        }
+      ]
+    }
+  ]
+}
