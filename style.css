@@ -1,0 +1,89 @@
+body {
+margin: 0;
+font-family: Arial, sans-serif;
+background: #0b0b0b;
+color: white;
+}
+
+.hero {
+text-align: center;
+padding: 80px 20px;
+background: linear-gradient(180deg, #000, #111);
+}
+
+.logo-placeholder {
+border: 2px dashed gold;
+padding: 20px;
+display: inline-block;
+margin-bottom: 20px;
+color: gold;
+}
+
+h1 {
+font-size: 40px;
+color: gold;
+}
+
+.tagline {
+color: #ccc;
+margin-bottom: 30px;
+}
+
+.buttons {
+display: flex;
+justify-content: center;
+gap: 15px;
+flex-wrap: wrap;
+}
+
+.btn-gold {
+background: gold;
+color: black;
+padding: 12px 20px;
+text-decoration: none;
+font-weight: bold;
+border-radius: 6px;
+}
+
+.btn-outline {
+border: 1px solid gold;
+color: gold;
+padding: 12px 20px;
+text-decoration: none;
+border-radius: 6px;
+}
+
+.section {
+padding: 60px 20px;
+text-align: center;
+}
+
+.section.dark {
+background: #111;
+}
+
+.grid {
+display: grid;
+grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+gap: 15px;
+margin-top: 20px;
+}
+
+.card {
+background: #1a1a1a;
+padding: 20px;
+border: 1px solid #333;
+border-radius: 10px;
+}
+
+.timeline div {
+margin: 10px 0;
+color: #ddd;
+}
+
+footer {
+text-align: center;
+padding: 20px;
+background: #000;
+color: #777;
+}
