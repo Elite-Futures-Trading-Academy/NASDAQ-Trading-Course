@@ -1,105 +1,55 @@
-<div id="course"></div>
+<div style="font-family:Arial; background:#0b0b0b; color:#fff; padding:20px;">
+  <h1 style="color:#d4af37;">Futures Trading Foundations</h1>
+  <p>Educate – Execute – Elevate</p>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-import {
-  getFirestore,
-  doc,
-  getDoc,
-  setDoc,
-  updateDoc
-} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+  <div id="course"></div>
+  <div style="margin-top:20px; color:#d4af37;" id="progressText"></div>
+</div>
 
-/* 🔥 YOUR FIREBASE CONFIG */
-const firebaseConfig = {
-  apiKey: "YOUR_API_KEY",
-  authDomain: "YOUR_PROJECT.firebaseapp.com",
-  projectId: "YOUR_PROJECT_ID",
-};
-
-const app = initializeApp(firebaseConfig);
-const db = getFirestore(app);
-
-/* COURSE STRUCTURE */
-const courseId = "futures-foundations";
-
+<script>
 const courseData = [
   {
     id: "m1",
     title: "Market Foundations",
     lessons: [
-      { id: "m1l1", title: "What the Futures Market Actually Is" },
-      { id: "m1l2", title: "How Price Moves" },
-      { id: "m1l3", title: "Market Sessions & Volatility" }
+      { id: "l1", title: "What the Futures Market Actually Is" },
+      { id: "l2", title: "How Price Moves" },
+      { id: "l3", title: "Market Sessions & Volatility" }
     ]
   },
   {
     id: "m2",
     title: "Chart Reading & Structure",
     lessons: [
-      { id: "m2l1", title: "Candlesticks That Matter" },
-      { id: "m2l2", title: "Market Structure" },
-      { id: "m2l3", title: "Support & Resistance" }
+      { id: "l4", title: "Candlesticks That Matter" },
+      { id: "l5", title: "Market Structure" },
+      { id: "l6", title: "Support & Resistance" }
     ]
   }
 ];
 
-/* 🔐 LOAD USER PROGRESS */
-async function loadUser(userId) {
-  const ref = doc(db, "users", userId);
-  const snap = await getDoc(ref);
+// Load saved progress
+let progress = JSON.parse(localStorage.getItem("courseProgress")) || {};
 
-  if (!snap.exists()) {
-    await setDoc(ref, {
-      userId,
-      progress: {},
-      completedLessons: 0,
-      courseProgressPercent: 0,
-      certificateUnlocked: false
-    });
-    return {};
-  }
-
-  return snap.data().progress || {};
+function saveProgress() {
+  localStorage.setItem("courseProgress", JSON.stringify(progress));
 }
 
-/* ✅ SAVE PROGRESS */
-async function toggleLesson(userId, lessonId, isChecked) {
-  const ref = doc(db, "users", userId);
-  const snap = await getDoc(ref);
-  const data = snap.data();
-
-  let progress = data.progress || {};
-  progress[lessonId] = isChecked;
-
-  const completedLessons = Object.values(progress).filter(v => v).length;
-  const totalLessons = 6; // update dynamically later
-  const percent = Math.round((completedLessons / totalLessons) * 100);
-
-  await updateDoc(ref, {
-    progress,
-    completedLessons,
-    courseProgressPercent: percent,
-    certificateUnlocked: percent === 100
-  });
-}
-
-/* 🧠 RENDER COURSE */
-async function render(userId) {
-  const progress = await loadUser(userId);
-
+function render() {
   const container = document.getElementById("course");
+  container.innerHTML = "";
 
   courseData.forEach(module => {
-    const moduleDiv = document.createElement("div");
+    const div = document.createElement("div");
+    div.style = "margin-bottom:20px; padding:10px; border:1px solid #333; border-radius:8px;";
 
-    let html = `<h2>${module.title}</h2>`;
+    let html = `<h2 style='color:#d4af37;'>${module.title}</h2>`;
 
     module.lessons.forEach(lesson => {
       const checked = progress[lesson.id] ? "checked" : "";
 
       html += `
-        <div>
+        <div style="margin:5px 0;">
           <label>
             <input type="checkbox" data-id="${lesson.id}" ${checked}>
             ${lesson.title}
@@ -108,18 +58,30 @@ async function render(userId) {
       `;
     });
 
-    moduleDiv.innerHTML = html;
-    container.appendChild(moduleDiv);
+    div.innerHTML = html;
+    container.appendChild(div);
   });
 
   document.querySelectorAll("input[type=checkbox]").forEach(cb => {
-    cb.addEventListener("change", e => {
-      toggleLesson(userId, e.target.dataset.id, e.target.checked);
+    cb.addEventListener("change", (e) => {
+      progress[e.target.dataset.id] = e.target.checked;
+      saveProgress();
+      updateProgress();
     });
   });
+
+  updateProgress();
 }
 
-/* 🚀 TEMP USER (replace with real auth later) */
-const demoUser = "user_001";
-render(demoUser);
+function updateProgress() {
+  const total = Object.keys(progress).length;
+  const completed = Object.values(progress).filter(v => v).length;
+
+  const percent = total ? Math.round((completed / 6) * 100) : 0;
+
+  document.getElementById("progressText").innerText =
+    "Progress: " + percent + "%";
+}
+
+render();
 </script>
