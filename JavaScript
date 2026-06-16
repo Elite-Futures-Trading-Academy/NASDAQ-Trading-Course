@@ -3,3 +3,56 @@ const firebaseConfig = {
   authDomain: "YOUR_DOMAIN",
   projectId: "YOUR_ID"
 };
+import {
+  getFirestore,
+  doc,
+  getDoc,
+  setDoc,
+  updateDoc
+} from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+const db = getFirestore(app);
+
+/* SHOW DASHBOARD */
+async function loadDashboard(user) {
+  const dash = document.getElementById("dashboard");
+  const authBox = document.getElementById("auth");
+
+  authBox.style.display = "none";
+  dash.style.display = "block";
+
+  document.getElementById("welcome").innerText =
+    "Welcome " + user.email;
+
+  const ref = doc(db, "users", user.uid);
+  const snap = await getDoc(ref);
+
+  if (!snap.exists()) {
+    await setDoc(ref, {
+      email: user.email,
+      percent: 0,
+      progress: {}
+    });
+  }
+
+  const data = snap.data() || { percent: 0 };
+
+  document.getElementById("percent").innerText =
+    "Progress: " + (data.percent || 0) + "%";
+
+  document.getElementById("bar").style.width =
+    (data.percent || 0) + "%";
+}
+
+/* AUTH STATE CONTROL */
+onAuthStateChanged(auth, (user) => {
+  if (user) {
+    loadDashboard(user);
+  }
+});
+
+/* LOGOUT */
+window.logout = async function () {
+  await auth.signOut();
+  location.reload();
+};
